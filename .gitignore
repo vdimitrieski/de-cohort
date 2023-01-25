@@ -1,0 +1,11 @@
+**/service-account-private-key.json
+
+**/.terraform/*
+**/*.tfstate
+**/*.tfstate.*
+
+**/.ipynb_checkpoints
+**/.ipynb_checkpoints/*
+
+**/*.csv
+**/*.csv.gz

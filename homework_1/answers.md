@@ -1,0 +1,161 @@
+# Homework
+## Q1
+
+--iidfile string
+
+## Q2
+
+3 packages are installed (pip, setuptools, wheel)
+
+## Q3
+
+20530
+
+```
+SELECT count(*) 
+FROM tripdata
+WHERE date(lpep_pickup_datetime) = '2019-01-15'::date AND date(lpep_dropoff_datetime) = '2019-01-15'::date;
+```
+
+## Q4
+
+2019-01-15
+
+```
+SELECT date(lpep_pickup_datetime), MAX(trip_distance)
+FROM tripdata
+GROUP BY date(lpep_pickup_datetime)
+ORDER BY MAX(trip_distance) DESC;
+```
+
+## Q5
+
+2: 1282 ; 3: 254
+
+```
+SELECT 
+	COUNT(passenger_count = 2 OR NULL) AS count_two,
+	COUNT(passenger_count = 3 OR NULL) AS count_three
+FROM tripdata
+WHERE date(lpep_pickup_datetime) = '2019-01-01'::date;
+```
+
+## Q6
+
+Long Island City/Queens Plaza
+
+```
+SELECT zdo."Zone", MAX(td.tip_amount)
+FROM tripdata td 
+	JOIN zones zpu ON td."PULocationID" = zpu."LocationID" 
+	JOIN zones zdo ON td."DOLocationID" = zdo."LocationID"
+WHERE LOWER(zpu."Zone") LIKE 'astoria'
+GROUP BY zdo."LocationID", zdo."Zone"
+ORDER BY MAX(td.tip_amount) DESC;
+```
+# Homework B
+
+## Q1 
+
+```
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_bigquery_dataset.dataset will be created
+  + resource "google_bigquery_dataset" "dataset" {
+      + creation_time              = (known after apply)
+      + dataset_id                 = "trips_data_all"
+      + delete_contents_on_destroy = false
+      + etag                       = (known after apply)
+      + id                         = (known after apply)
+      + labels                     = (known after apply)
+      + last_modified_time         = (known after apply)
+      + location                   = "europe-west6"
+      + project                    = "de-cohort"
+      + self_link                  = (known after apply)
+
+      + access {
+          + domain         = (known after apply)
+          + group_by_email = (known after apply)
+          + role           = (known after apply)
+          + special_group  = (known after apply)
+          + user_by_email  = (known after apply)
+
+          + dataset {
+              + target_types = (known after apply)
+
+              + dataset {
+                  + dataset_id = (known after apply)
+                  + project_id = (known after apply)
+                }
+            }
+
+          + routine {
+              + dataset_id = (known after apply)
+              + project_id = (known after apply)
+              + routine_id = (known after apply)
+            }
+
+          + view {
+              + dataset_id = (known after apply)
+              + project_id = (known after apply)
+              + table_id   = (known after apply)
+            }
+        }
+    }
+
+  # google_storage_bucket.data-lake-bucket will be created
+  + resource "google_storage_bucket" "data-lake-bucket" {
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EUROPE-WEST6"
+      + name                        = "dtc_data_lake_de-cohort"
+      + project                     = (known after apply)
+      + public_access_prevention    = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + uniform_bucket_level_access = true
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type = "Delete"
+            }
+
+          + condition {
+              + age                   = 30
+              + matches_prefix        = []
+              + matches_storage_class = []
+              + matches_suffix        = []
+              + with_state            = (known after apply)
+            }
+        }
+
+      + versioning {
+          + enabled = true
+        }
+
+      + website {
+          + main_page_suffix = (known after apply)
+          + not_found_page   = (known after apply)
+        }
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+google_bigquery_dataset.dataset: Creating...
+google_storage_bucket.data-lake-bucket: Creating...
+google_bigquery_dataset.dataset: Creation complete after 1s [id=projects/de-cohort/datasets/trips_data_all]
+google_storage_bucket.data-lake-bucket: Still creating... [10s elapsed]
+google_storage_bucket.data-lake-bucket: Creation complete after 11s [id=dtc_data_lake_de-cohort]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+```
