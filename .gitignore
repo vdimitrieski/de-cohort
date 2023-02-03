@@ -9,3 +9,9 @@
 
 **/*.csv
 **/*.csv.gz
+
+**/*-env
+
+**/__pycache__/
+
+**/data
