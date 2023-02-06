@@ -1,4 +1,5 @@
 **/service-account-private-key.json
+**/github-pat.txt
 
 **/.terraform/*
 **/*.tfstate

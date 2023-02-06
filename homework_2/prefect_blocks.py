@@ -1,5 +1,8 @@
 from prefect_gcp import GcpCredentials
 from prefect_gcp.cloud_storage import GcsBucket
+from prefect_github import GitHubCredentials
+from prefect.filesystems import GitHub
+
 import json
 
 # alternative to creating GCP blocks in the UI
@@ -19,3 +22,17 @@ bucket_block = GcsBucket(
 )
 
 bucket_block.save("de-cohort-gcs-bucket-block", overwrite=True)
+
+github_credentials_file = open('../github-pat.txt')
+github_credentials_block = GitHubCredentials(
+    token=github_credentials_file.read().rstrip()
+)
+
+github_credentials_block.save("de-cohort-github-credentials-block", overwrite=True)
+
+github_block = GitHub(
+    repository = "https://github.com/vdimitrieski/de-cohort",
+    credentials = github_credentials_block
+)
+
+github_block.save("de-cohort-github-block", overwrite=True)
